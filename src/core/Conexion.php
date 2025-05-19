@@ -3,8 +3,6 @@
 require_once __DIR__ . '/../config/config.php'; // Asegúrate de que la ruta sea correcta
 
 
-use PDO;
-use PDOException;
 
 
 class Conexion

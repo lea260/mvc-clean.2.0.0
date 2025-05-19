@@ -1,14 +1,15 @@
 <?php
-require_once '/config.php';
-require_once 'Infraestructura/AutoRepository.php';
-require_once 'encore/Conexion.php';
+
+require_once 'config/config.php';
+require_once 'infraestructura/AutoRepositorio.php';
+
 
 $autos = [];
 
 try {
-    $pdo = Conexion::getPDOConnection();
-    $stmt = $pdo->query("SELECT id, Marca, Modelo, Fecha_Compra FROM lanzamientosmodelos");
-    $autos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $repo = new AutoRepositorio();
+    $autos = $repo->listar();
+    var_dump($autos);    
 } catch (Exception $e) {
     $error = "Error al obtener los autos: " . $e->getMessage();
 } finally {
