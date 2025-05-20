@@ -1,6 +1,11 @@
 <?php
 
-require_once __DIR__ . '/../config/config.php'; // Asegúrate de que la ruta sea correcta
+namespace App\Core;
+
+use PDO;
+use PDOException;
+
+// require_once __DIR__ . '/../config/config.php'; // Asegúrate de que la ruta sea correcta
 
 
 

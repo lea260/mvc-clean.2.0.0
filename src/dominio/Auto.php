@@ -1,5 +1,9 @@
 <?php
 
+namespace App\Dominio;
+
+use Exception;
+
 class Auto
 {
     private string $patente;

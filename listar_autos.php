@@ -1,7 +1,14 @@
 <?php
+$base = __DIR__;
+$real = realpath(__DIR__ . '/config/bootstrap.php');
+require_once __DIR__ . '/config/bootstrap.php';
+// require_once dirname(__DIR__) . '/config/bootstrap.php';
 
-require_once 'config/config.php';
-require_once 'infraestructura/AutoRepositorio.php';
+use App\Infraestructura\AutoRepositorio;
+
+
+// require_once 'config/config.php';
+// require_once 'infraestructura/AutoRepositorio.php';
 
 
 $autos = [];
@@ -9,20 +16,21 @@ $autos = [];
 try {
     $repo = new AutoRepositorio();
     $autos = $repo->listar();
-    var_dump($autos);    
+    var_dump($autos);
 } catch (Exception $e) {
     $error = "Error al obtener los autos: " . $e->getMessage();
 } finally {
-    Conexion::cerrar();
 }
 ?>
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <title>Lista de Autos</title>
 </head>
+
 <body>
     <h1>Lista de Autos</h1>
     <?php if (!empty($autos)): ?>
@@ -51,4 +59,5 @@ try {
     <?php endif; ?>
     <p><a href="index.php">Volver al menú</a></p>
 </body>
+
 </html>

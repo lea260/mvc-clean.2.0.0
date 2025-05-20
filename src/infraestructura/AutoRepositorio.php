@@ -1,9 +1,17 @@
 <?php
 
-require_once  'dominio/Auto.php';
-require_once 'infraestructura/AutoRepositorioInterface.php';
-require_once 'core/Conexion.php';
-require_once 'dominio/Auto.php'; // Asegúrate de que la clase Auto esté en este archivo
+namespace App\Infraestructura;
+
+use App\Core\Conexion;
+use App\Dominio\Auto;
+use Exception;
+use PDO;
+use PDOException;
+
+// require_once  'dominio/Auto.php';
+// require_once 'infraestructura/AutoRepositorioInterface.php';
+// require_once 'core/Conexion.php';
+// require_once 'dominio/Auto.php'; // Asegúrate de que la clase Auto esté en este archivo
 
 class AutoRepositorio implements AutoRepositorioInterface
 {
@@ -11,10 +19,15 @@ class AutoRepositorio implements AutoRepositorioInterface
 
     public function __construct() {}
 
-    public function guardar(Auto $car): void
+    public function guardar(Auto $car): true
     {
         $stmt = $this->pdo->prepare("INSERT INTO cars (patente, modelo, disponible, reservado, version) VALUES (?, ?, ?, ?, ?)");
         $stmt->execute([$car->getPatente(), $car->getModelo(), $car->isDisponible(), $car->esReservado(), $car->getVersion()]);
+        if ($stmt->rowCount() > 0) {
+            return true;
+        } else {
+            throw false;
+        }
     }
 
     public function buscarPorPatente(string $patente): ?Auto
