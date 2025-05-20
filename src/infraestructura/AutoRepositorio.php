@@ -1,31 +1,30 @@
 <?php
 
-require_once  'dominio/Auto.php';  
+require_once  'dominio/Auto.php';
 require_once 'infraestructura/AutoRepositorioInterface.php';
-require_once 'core/Conexion.php'; 
+require_once 'core/Conexion.php';
+require_once 'dominio/Auto.php'; // Asegúrate de que la clase Auto esté en este archivo
 
 class AutoRepositorio implements AutoRepositorioInterface
 {
     private PDO $pdo;
 
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
-    public function guardar(Car $car): void
+    public function guardar(Auto $car): void
     {
         $stmt = $this->pdo->prepare("INSERT INTO cars (patente, modelo, disponible, reservado, version) VALUES (?, ?, ?, ?, ?)");
         $stmt->execute([$car->getPatente(), $car->getModelo(), $car->isDisponible(), $car->esReservado(), $car->getVersion()]);
     }
 
-    public function buscarPorPatente(string $patente): ?Car
+    public function buscarPorPatente(string $patente): ?Auto
     {
         $stmt = $this->pdo->prepare("SELECT patente, modelo, disponible, reservado, version FROM cars WHERE patente = ?");
         $stmt->execute([$patente]);
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($row) {
-            return new Car(
+            return new Auto(
                 $row['patente'],
                 $row['modelo'],
                 (bool) $row['disponible'],
@@ -37,7 +36,7 @@ class AutoRepositorio implements AutoRepositorioInterface
         return null;
     }
 
-    public function actualizar(Car $car): void
+    public function actualizar(Auto $car): void
     {
         $stmt = $this->pdo->prepare("UPDATE cars SET disponible = ?, reservado = ?, version = ? WHERE patente = ? AND version = ?");
         $stmt->execute([
@@ -55,23 +54,22 @@ class AutoRepositorio implements AutoRepositorioInterface
 
     public function listar(): array
     {
-    $pdo = null;
-    $stmt = null;
-    try {
-        $pdo = Conexion::getPDOConnection();
-        $sql = "SELECT patente, modelo, disponible, reservado, version FROM cars";
-        echo $sql;
-        $stmt = $pdo->query($sql);
-        // Devuelve todos los autos como instancias de la clase Auto
-        $autos= $stmt->fetchAll(PDO::FETCH_CLASS, 'Auto');
-        var_dump($autos);
-        return $autos;
-    } catch (PDOException $e) {
-        throw new Exception("Error al listar los autos: " . $e->getMessage());
-    } finally {
-        if ($stmt) $stmt = null;
-        if ($pdo) Conexion::cerrar();
+        $pdo = null;
+        $stmt = null;
+        try {
+            $pdo = Conexion::getPDOConnection();
+            $sql = "SELECT patente, modelo, disponible, reservado, version FROM cars";
+            echo $sql;
+            $stmt = $pdo->query($sql);
+            // Devuelve todos los autos como instancias de la clase Auto
+            $autos = $stmt->fetchAll(PDO::FETCH_CLASS, 'Auto');
+            var_dump($autos);
+            return $autos;
+        } catch (PDOException $e) {
+            throw new Exception("Error al listar los autos: " . $e->getMessage());
+        } finally {
+            if ($stmt) $stmt = null;
+            if ($pdo) Conexion::cerrar();
+        }
     }
-}
-
 }

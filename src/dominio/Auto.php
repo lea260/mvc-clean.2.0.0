@@ -1,6 +1,6 @@
 <?php
 
-class Car
+class Auto
 {
     private string $patente;
     private string $modelo;
@@ -82,7 +82,7 @@ class Car
             throw new Exception("La patente y el modelo son obligatorios.");
         }
         $this->validarPatente();
-    }	
+    }
 
     public function incrementarVersion(): void
     {
