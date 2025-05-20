@@ -1,0 +1,10 @@
+{
+    "autoload": {
+        "psr-4": {
+            "Applicacion\\": "Applicacion/",
+            "Core\\": "Core/",
+            "Dominio\\": "Dominio/",
+            "Infraestructura\\": "Infraestructura/"
+        }
+    }
+}

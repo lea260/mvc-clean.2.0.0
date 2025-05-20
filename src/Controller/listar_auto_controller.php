@@ -1,10 +1,13 @@
 <?php
-$base = __DIR__;
-$real = realpath(__DIR__ . '/config/bootstrap.php');
-require_once __DIR__ . '/config/bootstrap.php';
+$base = __DIR__ . '/../config/bootstrap.php';
+$real = realpath(__DIR__ . '/../config/bootstrap.php');
+$real = __DIR__ . '/../config/bootstrap.php';
+require_once __DIR__ . '/../config/bootstrap.php';
 // require_once dirname(__DIR__) . '/config/bootstrap.php';
 
-use App\Infraestructura\AutoRepositorio;
+
+
+use Infraestructura\AutoRepositorio;
 
 
 // require_once 'config/config.php';

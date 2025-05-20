@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Infraestructura;
+namespace Infraestructura;
 
-use App\Dominio\Auto;
+use Dominio\Auto;
 
 interface AutoRepositorioInterface
 {

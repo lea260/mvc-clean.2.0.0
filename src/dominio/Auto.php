@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Dominio;
+namespace Dominio;
 
 use Exception;
 

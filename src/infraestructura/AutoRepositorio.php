@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Infraestructura;
+namespace Infraestructura;
 
-use App\Core\Conexion;
-use App\Dominio\Auto;
+use Core\Conexion;
+use Dominio\Auto;
 use Exception;
+use Infraestructura\AutoRepositorioInterface;
 use PDO;
 use PDOException;
 
@@ -74,6 +75,7 @@ class AutoRepositorio implements AutoRepositorioInterface
             $sql = "SELECT patente, modelo, disponible, reservado, version FROM cars";
             echo $sql;
             $stmt = $pdo->query($sql);
+            
             // Devuelve todos los autos como instancias de la clase Auto
             $autos = $stmt->fetchAll(PDO::FETCH_CLASS, 'Auto');
             var_dump($autos);

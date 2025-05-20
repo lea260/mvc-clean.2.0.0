@@ -8,11 +8,15 @@
 </head>
 
 <body>
-    hola mundo
+    hola desde src index.
     <?php
     $nombre = "hola";
     $apellido = "hola";
     ?>
+    <ul>
+        <li><a href="index.php">Ir a la página principal (actual)</a></li>
+        <li><a href="Controller/listar_auto_controller.php">Listar Autos Disponibles</a></li>
+    </ul>
 </body>
 
 </html>
