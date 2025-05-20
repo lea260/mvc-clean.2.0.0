@@ -9,6 +9,10 @@ RUN apt-get update && apt-get install -y \
 # Instalar extensiones de PHP para MariaDB
 RUN docker-php-ext-install pdo pdo_mysql mysqli
 
+# Instalar Xdebug
+RUN pecl install xdebug \
+    && docker-php-ext-enable xdebug
+
 # Habilitar mod_rewrite en Apache (si usas .htaccess)
 RUN a2enmod rewrite
 

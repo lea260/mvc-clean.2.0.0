@@ -6,6 +6,7 @@ services:
     container_name: php_container
     ports:
       - "8080:80"
+      - "9003:9003"  # <-- Puerto Xdebug
     volumes:
       - ./src:/var/www/html
       - ./php-config:/usr/local/etc/php
