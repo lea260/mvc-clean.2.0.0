@@ -4,3 +4,4 @@ define('BASE_PATH', dirname(__DIR__)); // apunta a src/
 $test = BASE_PATH . '/vendor/autoload.php';
 $test = BASE_PATH . '/vendor/autoload.php';
 require_once BASE_PATH . '/vendor/autoload.php';
+require_once BASE_PATH . '/config/config.php';

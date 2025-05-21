@@ -1,7 +1,5 @@
 <?php
 // config.php
-$carga="con"
-echo "Cargando config.php\n";
 
 define('URL_PREFIX', '/');
 define('URL_BASE_PATH', 'http://' . $_SERVER['HTTP_HOST'] . URL_PREFIX);

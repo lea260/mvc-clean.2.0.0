@@ -74,10 +74,22 @@ class AutoRepositorio implements AutoRepositorioInterface
             $pdo = Conexion::getPDOConnection();
             $sql = "SELECT patente, modelo, disponible, reservado, version FROM cars";
             echo $sql;
+            
             $stmt = $pdo->query($sql);
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $auto = new Auto(
+                    $row['patente'],
+                    $row['modelo'],
+                    (bool) $row['disponible'],
+                    (bool) $row['reservado'],
+                    $row['version']
+                );
+                $autos[] = $auto;
+                // Aquí puedes hacer algo con cada auto, como agregarlo a un array
+            }
             
             // Devuelve todos los autos como instancias de la clase Auto
-            $autos = $stmt->fetchAll(PDO::FETCH_CLASS, 'Auto');
+            //$autos = $stmt->fetchAll(PDO::FETCH_CLASS, 'Auto');
             var_dump($autos);
             return $autos;
         } catch (PDOException $e) {
