@@ -32,7 +32,7 @@
     <?php else: ?>
         <p>No hay autos registrados.</p>
     <?php endif; ?>
-    <p><a href="index.php">Volver al menú</a></p>
+    <p><a href="<?= BASE_URL ?>index.php">Volver al menú</a></p>
 </body>
 
 </html>

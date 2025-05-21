@@ -3,12 +3,8 @@
 $path = __DIR__ . '/../config/bootstrap.php';
 require_once __DIR__ . '/../config/bootstrap.php';
 
+use Applicacion\AgregarAuto;
 use Dominio\Auto;
-// require_once 'config/config.php';
-// require_once 'Dominio/Auto.php';
-// require_once 'Aplication/AgregarAutoUseCase.php';
-// require_once 'Infraestructura/AutoRepository.php';
-// require_once 'encore/Conexion.php';
 
 $mensaje = "";
 
@@ -19,14 +15,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     try {
         $auto = new Auto($marca, $modelo, $fecha);
-        $repo = new AutoRepository();
-        //$useCase = new AgregarAutoUseCase($repo);
-
-        // if ($useCase->agregarAuto($auto)) {
-        //     $mensaje = "Auto agregado con éxito.";
-        // } else {
-        //     $mensaje = "Error al agregar el auto.";
-        // }
+        $casoUso = new AgregarAuto();
+        if ($casoUso->agregar($auto)) {
+            $mensaje = "Auto agregado con éxito.";
+        } else {
+            $mensaje = "Error al agregar el auto.";
+        }
     } catch (Exception $e) {
         $mensaje = "Error: " . $e->getMessage();
     }

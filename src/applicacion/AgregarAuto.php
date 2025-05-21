@@ -1,26 +1,15 @@
 <?php
 
-namespace App\Applicacion;
+namespace Applicacion;
 
-use App\Dominio\Auto;
-use App\Infraestructura\AutoRepositorio;
-// require_once 'Dominio/Auto.php';       // Importante: Incluir la clase Auto
-// require_once 'Infraestructura/AutoRepository.php'; // Incluir el repositorio
+use Dominio\Auto;
+use Infraestructura\AutoRepositorio;
 
-class AgregarAutoUseCase
+class AgregarAuto
 {
-    private AutoRepositorio $autoRepository;
-
-    public function __construct(AutoRepositorio $autoRepository)
+    public function agregar(Auto $auto): bool
     {
-        $this->autoRepository = $autoRepository;
-    }
-
-    public function agregarAuto(Auto $auto): bool
-    {
-        // Aquí podrías agregar más lógica de negocio antes de la persistencia
-        // Por ejemplo, verificar si ya existe un auto con la misma marca y modelo
-
-        return $this->autoRepository->guardar($auto);
+        $repo = new AutoRepositorio();
+        return $repo->guardar($auto);
     }
 }
