@@ -7,8 +7,8 @@ require_once __DIR__ . '/../config/bootstrap.php';
 
 
 
+use Applicacion\ListarAuto;
 use Core\View;
-use Infraestructura\AutoRepositorio;
 // require_once 'config/config.php';
 // require_once 'infraestructura/AutoRepositorio.php';
 
@@ -16,8 +16,8 @@ use Infraestructura\AutoRepositorio;
 $autos = [];
 
 try {
-    $repo = new AutoRepositorio();
-    $autos = $repo->listar();
+    $casoUso = new ListarAuto();
+    $autos = $casoUso->listar();
 } catch (Exception $e) {
     $error = "Error al obtener los autos: " . $e->getMessage();
 }
