@@ -1,9 +1,12 @@
 <?php
-$base = __DIR__ . '/../config/bootstrap.php';
-$real = realpath(__DIR__ . '/../config/bootstrap.php');
-$real = __DIR__ . '/../config/bootstrap.php';
+// $base = __DIR__ . '/../config/bootstrap.php';
+// $real = realpath(__DIR__ . '/../config/bootstrap.php');
+// $real = __DIR__ . '/../config/bootstrap.php';
+//$path ="var/www/html";
+$path = dirname(__DIR__, 1);
+define('BASE_PATH', dirname(__DIR__, 1));    // apunta a src/
+define('BASE_URL', 'http://localhost:8080/');
 require_once __DIR__ . '/../config/bootstrap.php';
-// require_once dirname(__DIR__) . '/config/bootstrap.php';
 
 
 

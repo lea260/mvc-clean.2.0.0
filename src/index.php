@@ -1,3 +1,6 @@
+<?php
+define('BASE_URL', 'http://localhost:8080/');
+define('BASE_URL_CTRL', 'http://localhost:8080/Controller/'); ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -15,7 +18,7 @@
     ?>
     <ul>
         <li><a href="index.php">Ir a la página principal (actual)</a></li>
-        <li><a href="Controller/listar_auto_controller.php">Listar Autos Disponibles</a></li>
+        <li><a href="<?= BASE_URL_CTRL ?>listar_auto_controller.php">yyListar Autos Disponibles</a></li>
     </ul>
 </body>
 

@@ -1,7 +1,8 @@
 <?php
-$path = dirname(__DIR__, 1);
-define('BASE_PATH', dirname(__DIR__, 1));    // apunta a src/
+$path = dirname(__DIR__, 2);
+define('BASE_PATH', dirname(__DIR__, 2));    // apunta a src/
 define('BASE_URL', 'http://localhost:8080/');
+define('BASE_URL_CTRL', 'http://localhost:8080/Controller/');
 $path = __DIR__ . '/../config/bootstrap.php';
 require_once __DIR__ . '/../config/bootstrap.php';
 
