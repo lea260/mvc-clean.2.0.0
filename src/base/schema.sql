@@ -8,3 +8,4 @@ CREATE TABLE cars (
     reservado BOOLEAN NOT NULL DEFAULT FALSE,
     version INT NOT NULL DEFAULT 0
 );
+
