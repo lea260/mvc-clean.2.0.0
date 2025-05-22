@@ -4,7 +4,8 @@
 // $real = __DIR__ . '/../config/bootstrap.php';
 //$path ="var/www/html";
 $path = dirname(__DIR__, 2);
-define('BASE_PATH', dirname(__DIR__, 2));    // apunta a src/
+define('BASE_PATH', dirname(__DIR__, 2));
+// define('BASE_PATH', $path); // apunta a src/ /var/html/www
 define('BASE_URL', 'http://localhost:8080/');
 require_once BASE_PATH . '/config/bootstrap.php';
 

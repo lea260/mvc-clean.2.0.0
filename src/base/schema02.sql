@@ -1,7 +1,7 @@
 CREATE DATABASE concesionaria;
 USE concesionaria;
 
-CREATE TABLE car (
+CREATE TABLE auto (
     id INT AUTO_INCREMENT PRIMARY KEY,
     patente VARCHAR(6) NOT NULL UNIQUE,
     marca VARCHAR(100) NOT NULL,
@@ -22,7 +22,7 @@ CREATE TABLE reserva (
     id_auto INT NOT NULL,
     fecha_reserva DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (id_usuario) REFERENCES usuario(id),
-    FOREIGN KEY (id_auto) REFERENCES car(id),
+    FOREIGN KEY (id_auto) REFERENCES auto(id),
     UNIQUE (id_auto) -- evita reservas múltiples del mismo auto
 );
 
@@ -31,14 +31,7 @@ CREATE TABLE venta (
     id_auto INT NOT NULL,
     id_vendedor INT NOT NULL,
     fecha_venta DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (id_auto) REFERENCES car(id),
+    FOREIGN KEY (id_auto) REFERENCES auto(id),
     FOREIGN KEY (id_vendedor) REFERENCES usuario(id)
 );
 
--- CREATE TABLE auditoria (
---     id INT AUTO_INCREMENT PRIMARY KEY,
---     id_auto INT NOT NULL,
---     accion ENUM('insertar', 'actualizar', 'eliminar') NOT NULL,
---     fecha DATETIME DEFAULT CURRENT_TIMESTAMP,
---     FOREIGN KEY (id_auto) REFERENCES car(id)
--- );
