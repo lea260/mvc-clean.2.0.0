@@ -23,8 +23,8 @@
                     <tr>
                         <td><?= htmlspecialchars($auto->getId()) ?></td>
                         <td><?= htmlspecialchars($auto->getPatente()) ?></td>
-                        <td><?= $auto->getModelo() ? 'Sí' : 'No' ?></td>
-                        <td><?= $auto->getEstado() ? 'Sí' : 'No' ?></td>
+                        <td><?= $auto->getModelo() ?></td>
+                        <td><?= $auto->getEstado() ?></td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>

@@ -12,6 +12,27 @@ class AutoRepositorio
 
     public function __construct() {}
 
+    public function actualizar(Auto $auto): void
+    {
+        $pdo = Conexion::getPDOConnection();
+        $stmt = $pdo->prepare("
+            UPDATE auto 
+            SET estado = :estado, version = :nueva_version
+            WHERE id = :id AND version = :version_actual
+        ");
+
+        $stmt->execute([
+            'estado' => $auto->getEstado(),
+            'nueva_version' => $auto->getVersion(),
+            'id' => $auto->getId(),
+            'version_actual' => $auto->getVersion() - 1
+        ]);
+
+        if ($stmt->rowCount() === 0) {
+            throw new \Exception("Conflicto de concurrencia: el auto fue modificado por otro proceso.");
+        }
+    }
+
     public function obtenerPorId(int $id): ?Auto
     {
         $pdo = Conexion::getPDOConnection();
@@ -30,21 +51,22 @@ class AutoRepositorio
             $row['id']
         );
     }
-
-    public function actualizar(Auto $auto): void
+    public function agregar(Auto $auto): void
     {
         $pdo = Conexion::getPDOConnection();
         $stmt = $pdo->prepare("
-            UPDATE auto 
-            SET estado = ?, version = ?
-            WHERE id = ?
+            INSERT INTO auto (patente, modelo, estado, version) 
+            VALUES (:patente, :modelo, :estado, :version)
         ");
+
         $stmt->execute([
-            $auto->getEstado(),
-            $auto->getVersion(),
-            $auto->getId()
+            'patente' => $auto->getPatente(),
+            'modelo' => $auto->getModelo(),
+            'estado' => $auto->getEstado(),
+            'version' => $auto->getVersion()
         ]);
     }
+    
     public static function listar(): array
     {
         $pdo = null;
