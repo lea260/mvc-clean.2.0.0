@@ -21,6 +21,7 @@ class AutoRepositorio
             WHERE id = :id AND version = :version_actual
         ");
 
+
         $stmt->execute([
             'estado' => $auto->getEstado(),
             'nueva_version' => $auto->getVersion(),
@@ -36,20 +37,15 @@ class AutoRepositorio
     public function obtenerPorId(int $id): ?Auto
     {
         $pdo = Conexion::getPDOConnection();
-        $sql = "SELECT * FROM auto WHERE id = ?";
+        $sql = "SELECT  id, patente,marca,modelo,estado FROM auto WHERE id = ?";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$id]);
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if (!$row) return null;
 
-        return new Auto(
-            $row['patente'],
-            $row['modelo'],
-            $row['estado'],
-            $row['version'],
-            $row['id']
-        );
+        $auto = self::arrayToAuto($row);
+        return $auto;
     }
     public function agregar(Auto $auto): bool
     {
@@ -100,13 +96,35 @@ class AutoRepositorio
             $pdo = null;
         }
     }
+    public static function listarDisponibles(): array
+    {
+        $pdo = null;
+        $stmt = null;
+        $autos = [];
+        try {
+            $pdo = Conexion::getPDOConnection();
+            $sql = "SELECT id, patente,marca,modelo,estado, version FROM auto WHERE estado = 'disponible'";
+            $stmt = $pdo->query($sql);
+            while ($row = $stmt->fetch()) {
+                $auto = self::arrayToAuto($row);
+                $autos[] = $auto;
+            }
+            return $autos;
+        } catch (PDOException $e) {
+            error_log("Error al obtener autos disponibles: " . $e->getMessage());
+            return [];
+        } finally {
+            $stmt = null;
+            $pdo = null;
+        }
+    }
     private static function arrayToAuto(array $row): Auto
     {
         return new Auto(
             $row['patente'],
             $row['modelo'],
             $row['estado'],
-            $row['version'],
+            $row['version'] ?? 0,
             $row['id']
         );
     }

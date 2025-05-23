@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/../../config/bootstrap.php';
 
-use Aplicacion\ReservarAuto;
+use Applicacion\ReservarAuto;
 use Core\View;
 
 $mensaje = "";

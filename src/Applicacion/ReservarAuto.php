@@ -1,6 +1,6 @@
 <?php
 
-namespace Aplicacion;
+namespace Applicacion;
 
 use Dominio\Auto;
 use Exception;

@@ -5,18 +5,20 @@ namespace Dominio;
 class Auto
 {
     private int $id;
-    private string $patente;
+    private string $marca;
     private string $modelo;
+    private string $patente;
     private string $estado;
     private int $version;
 
-    public function __construct(string $patente, string $modelo, string $estado = 'disponible', int $version = 0, ?int $id = null)
+    public function __construct(string $patente, string $marca, string $modelo, string $estado = 'disponible', int $version = 0, ?int $id = null)
     {
         $this->patente = $patente;
         $this->modelo = $modelo;
         $this->estado = $estado;
         $this->version = $version;
         $this->id = $id ?? 0;
+        $this->marca = $marca;
     }
 
     public function reservar(): void
@@ -39,6 +41,10 @@ class Auto
     public function getModelo(): string
     {
         return $this->modelo;
+    }
+    public function getMarca(): string
+    {
+        return $this->marca;
     }
     public function getEstado(): string
     {
