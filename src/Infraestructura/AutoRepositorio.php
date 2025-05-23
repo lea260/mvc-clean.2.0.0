@@ -51,22 +51,33 @@ class AutoRepositorio
             $row['id']
         );
     }
-    public function agregar(Auto $auto): void
+    public function agregar(Auto $auto): bool
     {
-        $pdo = Conexion::getPDOConnection();
-        $stmt = $pdo->prepare("
-            INSERT INTO auto (patente, modelo, estado, version) 
-            VALUES (:patente, :modelo, :estado, :version)
-        ");
+        $result = false;
+        $pdo = null;
+        try {
+            $pdo = Conexion::getPDOConnection();
+            $stmt = $pdo->prepare("
+                INSERT INTO auto (patente, modelo, estado, version) 
+                VALUES (:patente, :modelo, :estado, :version)
+            ");
 
-        $stmt->execute([
-            'patente' => $auto->getPatente(),
-            'modelo' => $auto->getModelo(),
-            'estado' => $auto->getEstado(),
-            'version' => $auto->getVersion()
-        ]);
+            $result = $stmt->execute([
+                'patente' => $auto->getPatente(),
+                'modelo' => $auto->getModelo(),
+                'estado' => $auto->getEstado(),
+                'version' => $auto->getVersion()
+            ]);
+            return $result;
+        } catch (PDOException $e) {
+            error_log("Error al agregar auto: " . $e->getMessage());
+            throw new \Exception("Error al agregar auto.");
+        } finally {
+            $stmt = null;
+            $pdo = null;
+        }
     }
-    
+
     public static function listar(): array
     {
         $pdo = null;

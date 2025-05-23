@@ -10,6 +10,7 @@ class AgregarAuto
     public function agregar(Auto $auto): bool
     {
         $repo = new AutoRepositorio();
-        //return $repo->listar($auto);
+        $result = $repo->agregar($auto);
+        return $result;
     }
 }
