@@ -30,6 +30,29 @@ class Auto
         $this->version++;
     }
 
+    public function validar(): void
+    {
+        // Validar patente: 3 letras + 3 dígitos
+        if (!preg_match('/^[A-Z]{3}[0-9]{3}$/', $this->patente)) {
+            throw new \Exception("Formato de patente inválido. Debe tener 3 letras seguidas de 3 números. Ej: ABC123");
+        }
+
+        // Validar estado
+        $estadosValidos = ['disponible', 'reservado', 'vendido'];
+        if (!in_array($this->estado, $estadosValidos, true)) {
+            throw new \Exception("Estado inválido. Debe ser: disponible, reservado o vendido.");
+        }
+    }
+
+    public function vender(): void
+    {
+        if ($this->estado === 'reservado') {
+            throw new \Exception("El auto está reservado.");
+        }
+        $this->estado = 'vendido';
+        $this->version++;
+    }
+
     public function getId(): int
     {
         return $this->id;

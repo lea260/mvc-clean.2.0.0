@@ -21,14 +21,12 @@ class AutoRepositorio
             WHERE id = :id AND version = :version_actual
         ");
 
-
         $stmt->execute([
             'estado' => $auto->getEstado(),
             'nueva_version' => $auto->getVersion(),
             'id' => $auto->getId(),
             'version_actual' => $auto->getVersion() - 1
         ]);
-
         if ($stmt->rowCount() === 0) {
             throw new \Exception("Conflicto de concurrencia: el auto fue modificado por otro proceso.");
         }
@@ -121,11 +119,12 @@ class AutoRepositorio
     private static function arrayToAuto(array $row): Auto
     {
         return new Auto(
-            $row['patente'],
-            $row['modelo'],
-            $row['estado'],
-            $row['version'] ?? 0,
-            $row['id']
+            patente: $row['patente'],
+            marca: $row['marca'],
+            modelo: $row['modelo'],
+            estado: $row['estado'],
+            version: $row['version'] ?? 0,
+            id: $row['id']
         );
     }
 }
