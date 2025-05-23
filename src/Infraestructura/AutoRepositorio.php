@@ -4,98 +4,77 @@ namespace Infraestructura;
 
 use Core\Conexion;
 use Dominio\Auto;
-use Exception;
-use Infraestructura\AutoRepositorioInterface;
 use PDO;
 use PDOException;
 
-// require_once  'dominio/Auto.php';
-// require_once 'infraestructura/AutoRepositorioInterface.php';
-// require_once 'core/Conexion.php';
-// require_once 'dominio/Auto.php'; // Asegúrate de que la clase Auto esté en este archivo
-
-class AutoRepositorio implements AutoRepositorioInterface
+class AutoRepositorio
 {
-    private PDO $pdo;
 
     public function __construct() {}
 
-    public function guardar(Auto $car): true
+    public function obtenerPorId(int $id): ?Auto
     {
-        $stmt = $this->pdo->prepare("INSERT INTO cars (patente, modelo, disponible, reservado, version) VALUES (?, ?, ?, ?, ?)");
-        $stmt->execute([$car->getPatente(), $car->getModelo(), $car->isDisponible(), $car->esReservado(), $car->getVersion()]);
-        if ($stmt->rowCount() > 0) {
-            return true;
-        } else {
-            throw false;
-        }
-    }
-
-    public function buscarPorPatente(string $patente): ?Auto
-    {
-        $stmt = $this->pdo->prepare("SELECT patente, modelo, disponible, reservado, version FROM cars WHERE patente = ?");
-        $stmt->execute([$patente]);
+        $pdo = Conexion::getPDOConnection();
+        $sql = "SELECT * FROM auto WHERE id = ?";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$id]);
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($row) {
-            return new Auto(
-                $row['patente'],
-                $row['modelo'],
-                (bool) $row['disponible'],
-                (bool) $row['reservado'],
-                $row['version']
-            );
-        }
+        if (!$row) return null;
 
-        return null;
+        return new Auto(
+            $row['patente'],
+            $row['modelo'],
+            $row['estado'],
+            $row['version'],
+            $row['id']
+        );
     }
 
-    public function actualizar(Auto $car): void
+    public function actualizar(Auto $auto): void
     {
-        $stmt = $this->pdo->prepare("UPDATE cars SET disponible = ?, reservado = ?, version = ? WHERE patente = ? AND version = ?");
+        $pdo = Conexion::getPDOConnection();
+        $stmt = $pdo->prepare("
+            UPDATE auto 
+            SET estado = ?, version = ?
+            WHERE id = ?
+        ");
         $stmt->execute([
-            $car->isDisponible(),
-            $car->esReservado(),
-            $car->getVersion(),
-            $car->getPatente(),
-            $car->getVersion() - 1 // Condición de bloqueo optimista
+            $auto->getEstado(),
+            $auto->getVersion(),
+            $auto->getId()
         ]);
-
-        if ($stmt->rowCount() == 0) {
-            throw new Exception("Conflicto de concurrencia: Otro usuario ha modificado el auto.");
-        }
     }
-
-    public function listar(): array
+    public static function listar(): array
     {
         $pdo = null;
         $stmt = null;
         try {
             $pdo = Conexion::getPDOConnection();
-            $sql = "SELECT patente, modelo, disponible, reservado, version FROM cars";
-            $autos = [];
-            // Ejecuta la consulta y obtiene los resultados
+            $sql = "SELECT id, patente,marca,modelo,estado, version FROM auto";
             $stmt = $pdo->query($sql);
-            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                $auto = new Auto(
-                    $row['patente'],
-                    $row['modelo'],
-                    (bool) $row['disponible'],
-                    (bool) $row['reservado'],
-                    $row['version']
-                );
+            while ($row = $stmt->fetch()) {
+                $auto = self::arrayToAuto($row);
                 $autos[] = $auto;
-                // Aquí puedes hacer algo con cada auto, como agregarlo a un array
             }
-
-            // Devuelve todos los autos como instancias de la clase Auto
-            //$autos = $stmt->fetchAll(PDO::FETCH_CLASS, 'Auto');
+            //retornar los autos
             return $autos;
         } catch (PDOException $e) {
-            throw new Exception("Error al listar los autos: " . $e->getMessage());
+            error_log("Error al obtener autos: " . $e->getMessage());
+            return [];
         } finally {
-            if ($stmt) $stmt = null;
-            if ($pdo) Conexion::cerrar();
+            $stmt = null;
+            $pdo = null;
         }
+    }
+    private static function arrayToAuto(array $row): Auto
+    {
+        return new Auto(
+            $row['patente'],
+            $row['modelo'],
+            $row['estado'],
+            $row['version'],
+            $row['id']
+        );
     }
 }

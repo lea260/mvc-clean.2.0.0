@@ -1,7 +1,5 @@
 <?php
-// $base = __DIR__ . '/../config/bootstrap.php';
-// $real = realpath(__DIR__ . '/../config/bootstrap.php');
-// $real = __DIR__ . '/../config/bootstrap.php';
+
 //$path ="var/www/html";
 $path = dirname(__DIR__, 2);
 define('BASE_PATH', dirname(__DIR__, 2));
@@ -22,8 +20,7 @@ $autos = [];
 try {
     $casoUso = new ListarAuto();
     $autos = $casoUso->listar();
+    View::render('auto/listar.php', ['autos' => $autos]);
 } catch (Exception $e) {
     $error = "Error al obtener los autos: " . $e->getMessage();
 }
-
-View::render('listar_auto_view.php', ['autos' => $autos]);

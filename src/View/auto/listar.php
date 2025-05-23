@@ -12,19 +12,19 @@
         <table border="1" cellpadding="5">
             <thead>
                 <tr>
+                    <th>Id</th>
                     <th>Patente</th>
                     <th>Modelo</th>
-                    <th>Disponible</th>
-                    <th>Reservado</th>
+                    <th>Estado</th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach ($autos as $auto): ?>
                     <tr>
+                        <td><?= htmlspecialchars($auto->getId()) ?></td>
                         <td><?= htmlspecialchars($auto->getPatente()) ?></td>
-                        <td><?= htmlspecialchars($auto->getModelo()) ?></td>
-                        <td><?= $auto->isDisponible() ? 'Sí' : 'No' ?></td>
-                        <td><?= $auto->esReservado() ? 'Sí' : 'No' ?></td>
+                        <td><?= $auto->getModelo() ? 'Sí' : 'No' ?></td>
+                        <td><?= $auto->getEstado() ? 'Sí' : 'No' ?></td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
