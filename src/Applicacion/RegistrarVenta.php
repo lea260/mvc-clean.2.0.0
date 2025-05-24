@@ -2,6 +2,7 @@
 
 namespace Applicacion;
 
+use COM;
 use Core\Conexion;
 use Dominio\Venta;
 use Exception;
@@ -12,10 +13,6 @@ use PDO;
 
 class RegistrarVenta
 {
-    private VentaRepositorio $ventaRepo;
-    private AutoRepositorio $autoRepo;
-    private UsuarioRepositorio $usuarioRepo;
-    private PDO $pdo;
 
     public function __construct() {}
 
@@ -23,7 +20,7 @@ class RegistrarVenta
     {
         $pdo = Conexion::getPDOConnection();
         $pdo->beginTransaction();
-        $stmt = null;
+
         try {
             $ventaRepo = new VentaRepositorio();
             $autoRepo = new AutoRepositorio($pdo);
@@ -58,7 +55,7 @@ class RegistrarVenta
             throw $e;
         } finally {
             $pdo = null;
-            $stmt = null;
+            Conexion::cerrar();
         }
     }
 }

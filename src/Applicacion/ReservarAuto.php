@@ -2,18 +2,19 @@
 
 namespace Applicacion;
 
+use Core\Conexion;
 use Dominio\Auto;
+use Dominio\Reserva;
 use Exception;
 use Infraestructura\AutoRepositorio;
-use Infraestructura\UsuarioRepositorio;
 use Infraestructura\ReservaRepositorio;
-use Dominio\Reserva;
+use Infraestructura\UsuarioRepositorio;
 
 class ReservarAuto
 {
     public function ejecutar(int $idUsuario, int $idAuto): void
     {
-        $pdo = \Core\Conexion::getPDOConnection();
+        $pdo = Conexion::getPDOConnection();
         $pdo->beginTransaction();
         try {
             $autoRepo = new AutoRepositorio($pdo);
@@ -39,6 +40,9 @@ class ReservarAuto
         } catch (Exception $e) {
             $pdo->rollBack();
             throw $e;
+        } finally {
+            $pdo = null;
+            Conexion::cerrar();
         }
     }
 }
