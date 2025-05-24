@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $mensaje = "Reserva realizada con éxito.";
         View::render('mensaje/comun.php', [
             'titulo' => $mensaje,
-            'mensaje' => "error al reservar auto",
+            'mensaje' => "auto reservado con éxito",
         ]);
     } catch (Exception $e) {
         $mensaje = $e->getMessage();
