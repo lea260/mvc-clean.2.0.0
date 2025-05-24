@@ -1,7 +1,8 @@
 <?php
 
-namespace Aplicacion;
+namespace Applicacion;
 
+use Core\Conexion;
 use Dominio\Venta;
 use Exception;
 use Infraestructura\AutoRepositorio;
@@ -16,21 +17,19 @@ class RegistrarVenta
     private UsuarioRepositorio $usuarioRepo;
     private PDO $pdo;
 
-    public function __construct()
-    {
-        $this->pdo = $pdo;
-        $this->ventaRepo = new VentaRepositorio($pdo);
-        $this->autoRepo = new AutoRepositorio($pdo);
-        $this->usuarioRepo = new UsuarioRepositorio($pdo);
-    }
+    public function __construct() {}
 
-    public function ejecutar(int $idAuto, int $idVendedor): void
+    public function ejecutar(int $idAuto, int $idVendedor, float $precio): void
     {
-        $this->pdo->beginTransaction();
-
+        $pdo = Conexion::getPDOConnection();
+        $pdo->beginTransaction();
+        $stmt = null;
         try {
-            $auto = $this->autoRepo->obtenerPorId($idAuto);
-            $vendedor = $this->usuarioRepo->obtenerPorId($idVendedor);
+            $ventaRepo = new VentaRepositorio();
+            $autoRepo = new AutoRepositorio($pdo);
+            $usuarioRepo = new UsuarioRepositorio($pdo);
+            $auto = $autoRepo->obtenerPorId($idAuto);
+            $vendedor = $usuarioRepo->obtenerPorId($idVendedor);
 
             if (!$auto || !$vendedor) {
                 throw new Exception("Auto o usuario no encontrado.");
@@ -42,15 +41,22 @@ class RegistrarVenta
 
             // Lógica de negocio
             $auto->vender();
-            $this->autoRepo->actualizar($auto);
+            $autoRepo->actualizar($auto);
 
-            $venta = new Venta($auto, $vendedor);
-            $this->ventaRepo->registrar($venta);
-
-            $this->pdo->commit();
+            $venta = new Venta(
+                auto: $auto,
+                vendedor: $vendedor,
+                precio: $precio,
+                fechaVenta: new \DateTime()
+            );
+            $ventaRepo->registrar($venta);
+            $pdo->commit();
         } catch (Exception $e) {
-            $this->pdo->rollBack();
+            $pdo->rollBack();
             throw $e;
+        } finally {
+            $pdo = null;
+            $stmt = null;
         }
     }
 }

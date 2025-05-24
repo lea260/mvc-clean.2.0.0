@@ -9,34 +9,38 @@ define('BASE_URL_CTRL', 'http://localhost:8080/controller/');
 require_once BASE_PATH . '/config/bootstrap.php';
 
 
-
-use Aplicacion\RegistrarVenta;
+use Applicacion\RegistrarVenta;
 use Core\View;
 
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    try {
 
-
-try {
-    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-        throw new Exception("Método no permitido", 405);
+        //$pdo = Database::getConnection();
+        $caso = new RegistrarVenta();
+        $idAuto = (int)$_POST['id_auto'] ?? null;
+        $idUsuario = (int)$_POST['id_usuario'] ?? null;
+        $precio = (float)$_POST['precio'] ?? null;
+        $caso->ejecutar(
+            idAuto: $idAuto,
+            idVendedor: $idUsuario,
+            precio: $precio
+        );
+        View::render("mensaje/comun.php", [
+            'titulo' => "Venta Auto",
+            'mensaje' => "Auto vendido con éxito",
+        ]);
+    } catch (Exception $e) {
+        //http_response_code(500);
+        View::render("mensaje/comun.php", [
+            'titulo' => "Venta Auto",
+            'mensaje' => "Auto vendido con exito",
+        ]);
     }
-    //$pdo = Database::getConnection();
-    $caso = new RegistrarVenta();
-    $idAuto = $_POST['id_auto'] ?? null;
-    $idUsuario = $_POST['id_usuario'] ?? null;
-    $precio = $_POST['precio'] ?? null;
-    $caso->ejecutar($_POST['id_auto'], $_POST['id_usuario']);
-    View::render("mensaje/comun", [
-        'titulo' => "Venta Auto",
-        'mensaje' => "Auto vendido con exito",
-    ]);
-} catch (Exception $e) {
-    http_response_code(500);
-    View::render("mensaje/error", ['mensaje' => "Error interno del servidor."]);
-} catch (Exception $e) {
-    http_response_code($e->getCode());
+} else {
+    http_response_code(405);
     View::render("mensaje/error", [
-        'titulo' => "Error en la venta",
-        'mensaje' => $e->getMessage(),
+        'titulo' => "Método no permitido",
+        'mensaje' => "Solo se permiten solicitudes POST.",
     ]);
 }

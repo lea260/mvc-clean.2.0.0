@@ -10,13 +10,13 @@ class Venta
     private \DateTime $fechaVenta;
     private  float $precio;
 
-    public function __construct(Auto $auto, Usuario $vendedor, ?\DateTime $fechaVenta = null, ?int $id = null, $precio)
+    public function __construct(Auto $auto, Usuario $vendedor, float $precio, ?int $id = null, ?\DateTime $fechaVenta = null)
     {
         $this->auto = $auto;
         $this->vendedor = $vendedor;
+        $this->precio = $precio;
         $this->fechaVenta = $fechaVenta ?? new \DateTime();
         $this->id = $id ?? 0;
-        $this->precio = $precio;
     }
 
     public function getId(): int
@@ -41,10 +41,7 @@ class Venta
         return $this->auto->getId();
     }
 
-    public function getIdVendedor(): int
-    {
-        return $this->vendedor->getId();
-    }
+
     public function getFecha(): \DateTime
     {
         return $this->fechaVenta;
