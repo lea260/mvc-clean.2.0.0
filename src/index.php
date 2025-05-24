@@ -19,6 +19,7 @@ define('BASE_URL_CTRL', 'http://localhost:8080/controller/'); ?>
     <ul>
         <li><a href="index.php">inicio</a></li>
         <li><a href="<?= BASE_URL_CTRL ?>auto/listar_controller.php">Listar Autos</a></li>
+        <li><a href="<?= BASE_URL_CTRL ?>auto/crear_controller.php">Nuevo Auto</a></li>
     </ul>
 </body>
 

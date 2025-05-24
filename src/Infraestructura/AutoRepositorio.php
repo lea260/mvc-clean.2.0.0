@@ -34,16 +34,21 @@ class AutoRepositorio
 
     public function obtenerPorId(int $id): ?Auto
     {
-        $pdo = Conexion::getPDOConnection();
-        $sql = "SELECT  id, patente,marca,modelo,estado FROM auto WHERE id = ?";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute([$id]);
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        try {
+            $pdo = Conexion::getPDOConnection();
+            $sql = "SELECT  id, patente,marca,modelo,estado FROM auto WHERE id = ?";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute([$id]);
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if (!$row) return null;
+            if (!$row) return null;
 
-        $auto = self::arrayToAuto($row);
-        return $auto;
+            $auto = self::arrayToAuto($row);
+            return $auto;
+        } catch (PDOException $e) {
+            error_log("Error al conectar a la base de datos: " . $e->getMessage());
+            throw new \Exception("Error al conectar a la base de datos.");
+        }
     }
     public function agregar(Auto $auto): bool
     {
@@ -52,15 +57,16 @@ class AutoRepositorio
         try {
             $pdo = Conexion::getPDOConnection();
             $stmt = $pdo->prepare("
-                INSERT INTO auto (patente, modelo, estado, version) 
-                VALUES (:patente, :modelo, :estado, :version)
+            INSERT INTO auto (patente, marca, modelo, estado) 
+            VALUES (:patente, :marca, :modelo, :estado)
             ");
 
+
             $result = $stmt->execute([
-                'patente' => $auto->getPatente(),
-                'modelo' => $auto->getModelo(),
-                'estado' => $auto->getEstado(),
-                'version' => $auto->getVersion()
+                ':patente' => $auto->getPatente(),
+                ':marca' => $auto->getMarca(),
+                ':modelo' => $auto->getModelo(),
+                ':estado' => $auto->getEstado()
             ]);
             return $result;
         } catch (PDOException $e) {
