@@ -41,6 +41,7 @@ class RegistrarVenta
 
             // Lógica de negocio
             $auto->vender();
+
             $autoRepo->actualizar($auto);
 
             $venta = new Venta(
@@ -49,6 +50,7 @@ class RegistrarVenta
                 precio: $precio,
                 fechaVenta: new \DateTime()
             );
+            $venta->validarPrecio($precio);
             $ventaRepo->registrar($venta);
             $pdo->commit();
         } catch (Exception $e) {
