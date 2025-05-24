@@ -12,7 +12,7 @@ use Core\View;
 
 try {
     //se puede verificar si el usuario es admin
-    View::render('mensaje/comun.php', [
+    View::render('auto/crear.php', [
         'titulo' => "Crear Auto",
         'mensaje' => "auto creado con exito",
     ]);

@@ -24,8 +24,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             modelo: $modelo,
             estado: $estado
         );
-        // Validar + Agregar
-        $auto->validar();
         $casoUso = new AgregarAuto();
         $casoUso->agregar($auto);
 
