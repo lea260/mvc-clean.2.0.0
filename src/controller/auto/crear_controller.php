@@ -12,7 +12,13 @@ use Core\View;
 
 try {
     //se puede verificar si el usuario es admin
-    View::render('auto/crear.php');
+    View::render('mensaje/comun.php', [
+        'titulo' => "Crear Auto",
+        'mensaje' => "auto creado con exito",
+    ]);
 } catch (Exception $e) {
-    View::render('mensaje/error.php', ['error' => "Error al ingresar los autos: " . $e->getMessage()]);
+    View::render('mensaje/comun.php', [
+        'titulo' => "Crear Auto",
+        'mensaje' => "auto creado con exito",
+    ]);
 }

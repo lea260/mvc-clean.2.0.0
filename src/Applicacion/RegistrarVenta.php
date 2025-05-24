@@ -16,7 +16,7 @@ class RegistrarVenta
     private UsuarioRepositorio $usuarioRepo;
     private PDO $pdo;
 
-    public function __construct(PDO $pdo)
+    public function __construct()
     {
         $this->pdo = $pdo;
         $this->ventaRepo = new VentaRepositorio($pdo);

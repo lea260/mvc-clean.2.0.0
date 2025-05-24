@@ -19,17 +19,38 @@
         </ul>
         <?php
         if ($auto->getEstado() === 'disponible'): ?>
-            <p>El auto está disponible para reservar o comprar.</p>
-            <form method="POST" action="<?= BASE_URL_CTRL ?>reserva/auto_controller.php">
-                <input type="hidden" name="id_auto" value="<?= htmlspecialchars($auto->getId()) ?>">
-                <label>ID Usuario: <input type="number" name="id_usuario" required></label>
-                <button type="submit">Reservar</button>
-            </form>
-            <form method="POST" action="/controller/comprar_auto_controller.php">
-                <input type="hidden" name="id_auto" value="<?= htmlspecialchars($auto->getId()) ?>">
-                <label>ID Usuario: <input type="number" name="id_usuario" required></label>
-                <button type="submit">Comprar</button>
-            </form>
+            <p><strong>El auto está disponible para reservar o vender.</strong></p>
+
+            <fieldset style="margin-bottom: 1em; padding: 1em;">
+                <legend><strong>Reservar Auto</strong></legend>
+                <form method="POST" action="<?= BASE_URL_CTRL ?>reserva/auto_controller.php">
+                    <input type="hidden" name="id_auto" value="<?= htmlspecialchars($auto->getId()) ?>">
+
+                    <label for="reserva_usuario">ID vendedor:</label>
+                    <input type="number" name="id_vendedor" id="reserva_usuario" required>
+
+                    <br><br>
+                    <button type="submit">Reservar</button>
+                </form>
+            </fieldset>
+
+            <fieldset style="padding: 1em;">
+                <legend><strong>Vender Auto</strong></legend>
+                <form method="POST" action="<?= BASE_URL_CTRL ?>venta/vender_controller.php">
+                    <input type="hidden" name="id_auto" value="<?= htmlspecialchars($auto->getId()) ?>">
+
+                    <label for="venta_usuario">ID vendedor:</label>
+                    <input type="number" name="id_usuario" id="venta_usuario" required>
+                    <br><br>
+
+                    <label for="precio">Precio:</label>
+                    <input type="number" name="precio" id="precio" step="0.01" min="0" required placeholder="Ej: 35000.00">
+                    <br><br>
+
+                    <button type="submit">Comprar</button>
+                </form>
+            </fieldset>
+
         <?php elseif ($auto->getEstado() === 'reservado'): ?>
             <p>El auto está reservado.</p>
         <?php elseif ($auto->getEstado() === 'vendido'): ?>
