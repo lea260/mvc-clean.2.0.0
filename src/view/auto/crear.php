@@ -17,9 +17,9 @@
                 type="text"
                 id="patente"
                 name="patente"
-                maxlength="6"
+                maxlength="7"
                 required
-                placeholder="Ej: ABC123">
+                placeholder="Ej: ABC1234">
         </div>
 
         <div>

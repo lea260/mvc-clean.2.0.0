@@ -41,7 +41,6 @@ class Venta
         return $this->auto->getId();
     }
 
-
     public function getFecha(): \DateTime
     {
         return $this->fechaVenta;
@@ -49,5 +48,12 @@ class Venta
     public function getPrecio(): float
     {
         return $this->precio;
+    }
+
+    public function validarPrecio(float $precio): void
+    {
+        if ($precio <= 0) {
+            throw new \InvalidArgumentException("El precio debe ser mayor a cero.");
+        }
     }
 }

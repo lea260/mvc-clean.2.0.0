@@ -14,7 +14,7 @@ DROP TABLE IF EXISTS auto;
 -- Crear tabla auto
 CREATE TABLE auto (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    patente VARCHAR(6) NOT NULL UNIQUE,
+    patente VARCHAR(7) NOT NULL UNIQUE,
     marca VARCHAR(100) NOT NULL,
     modelo VARCHAR(100) NOT NULL,
     estado ENUM('disponible', 'reservado', 'vendido') NOT NULL DEFAULT 'disponible',

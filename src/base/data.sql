@@ -1,10 +1,10 @@
 INSERT INTO auto (patente, marca, modelo, estado)
 VALUES 
-('ABC123', 'Toyota', 'Corolla', 'disponible'),
-('DEF456', 'Honda', 'Civic', 'reservado'),
-('GHI789', 'Ford', 'Focus', 'vendido'),
-('JKL321', 'Chevrolet', 'Onix', 'disponible'),
-('MNO654', 'Volkswagen', 'Gol', 'disponible');
+('ABC1234', 'Toyota', 'Corolla', 'disponible'),
+('DEF4567', 'Honda', 'Civic', 'reservado'),
+('GHI6789', 'Ford', 'Focus', 'vendido'),
+('JKL3210', 'Chevrolet', 'Onix', 'disponible'),
+('MNO6543', 'Volkswagen', 'Gol', 'disponible');
 
 INSERT INTO usuario (nombre, correo_electronico)
 VALUES 

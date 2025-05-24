@@ -26,10 +26,10 @@
                 <form method="POST" action="<?= BASE_URL_CTRL ?>reserva/auto_controller.php">
                     <input type="hidden" name="id_auto" value="<?= htmlspecialchars($auto->getId()) ?>">
 
-                    <label for="reserva_usuario">ID vendedor:</label>
-                    <input type="number" name="id_vendedor" id="reserva_usuario" required>
-
+                    <label for="venta_usuario">ID vendedor:</label>
+                    <input type="number" name="id_usuario" id="venta_usuario" required>
                     <br><br>
+
                     <button type="submit">Reservar</button>
                 </form>
             </fieldset>

@@ -2,7 +2,7 @@
 
 namespace Dominio;
 
-class Auto
+class Auto implements   \JsonSerializable
 {
     private int $id;
     private string $marca;
@@ -33,7 +33,7 @@ class Auto
     public function validar(): void
     {
         // Validar patente: 3 letras + 3 dígitos
-        if (!preg_match('/^[A-Z]{3}[0-9]{3}$/', $this->patente)) {
+        if (!preg_match('/^[A-Z]{3}[0-9]{4}$/', $this->patente)) {
             throw new \Exception("Formato de patente inválido. Debe tener 3 letras seguidas de 3 números. Ej: ABC123");
         }
 
@@ -51,6 +51,17 @@ class Auto
         }
         $this->estado = 'vendido';
         $this->version++;
+    }
+    public function jsonSerialize(): array
+    {
+        return [
+            'id' => $this->id,
+            'patente' => $this->patente,
+            'marca' => $this->marca,
+            'modelo' => $this->modelo,
+            'estado' => $this->estado,
+            'version' => $this->version,
+        ];
     }
 
     public function getId(): int
