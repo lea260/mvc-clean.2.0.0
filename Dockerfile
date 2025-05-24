@@ -27,7 +27,14 @@ COPY php-config/php.ini /usr/local/etc/php/conf.d/custom.ini
 
 # Copiar entrypoint personalizado
 
+
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+
+# --- ADD THESE DEBUG LINES ---
+RUN ls -la /usr/local/bin/docker-entrypoint.sh
+RUN cat /usr/local/bin/docker-entrypoint.sh
+RUN /usr/local/bin/docker-entrypoint.sh --help || echo "Entrypoint script is not directly executable yet or has no help option"
+    # --- END DEBUG LINES ---
 
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
