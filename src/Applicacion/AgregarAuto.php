@@ -9,9 +9,13 @@ class AgregarAuto
 {
     public function agregar(Auto $auto): bool
     {
-        $repo = new AutoRepositorio();
-        $auto->validar();
-        $result = $repo->agregar($auto);
-        return $result;
+        try {
+            $repo = new AutoRepositorio();
+            $auto->validar();
+            $result = $repo->agregar($auto);
+            return $result;
+        } catch (\Exception $e) {
+            throw $e;
+        }
     }
 }

@@ -16,7 +16,11 @@ class VerDetalleAuto
     // Si necesitas ver el detalle de un solo auto por id:
     public function obtenerPorId(int $id): ?Auto
     {
-        $repo = new AutoRepositorio();
-        return $repo->obtenerPorId($id);
+        try {
+            $repo = new AutoRepositorio();
+            return $repo->obtenerPorId($id);
+        } catch (\Exception $e) {
+            throw $e;
+        }
     }
 }

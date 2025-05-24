@@ -8,7 +8,11 @@ class ListarAuto
 {
     public function listar()
     {
-        $repo = new AutoRepositorio();
-        return $repo->listar();
+        try {
+            $repo = new AutoRepositorio();
+            return $repo->listar();
+        } catch (\Exception $e) {
+            throw $e;
+        }
     }
 }
