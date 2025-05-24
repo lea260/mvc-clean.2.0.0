@@ -24,5 +24,8 @@ try {
     $autos = $casoUso->listar();
     View::render('auto/listar.php', ['autos' => $autos]);
 } catch (Exception $e) {
-    $error = "Error al obtener los autos: " . $e->getMessage();
+    View::render('mensaje/comun.php', [
+        'titulo' => 'Error al obtener los autos',
+        'mensaje' => $e->getMessage(),
+    ]);
 }

@@ -45,6 +45,8 @@ CREATE TABLE venta (
     id_auto INT NOT NULL,
     id_vendedor INT NOT NULL,
     fecha_venta DATETIME DEFAULT CURRENT_TIMESTAMP,
+    precio DECIMAL(10,2) NOT NULL,
     FOREIGN KEY (id_auto) REFERENCES auto(id),
     FOREIGN KEY (id_vendedor) REFERENCES usuario(id)
 );
+

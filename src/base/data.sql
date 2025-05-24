@@ -17,6 +17,7 @@ INSERT INTO reserva (id_usuario, id_auto)
 VALUES 
 (1, 2);
 
-INSERT INTO venta (id_auto, id_vendedor)
+INSERT INTO venta (id_auto, id_vendedor, precio)
 VALUES 
-(3, 3);
+(3, 3, 35000.00);
+

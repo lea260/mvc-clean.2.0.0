@@ -20,7 +20,7 @@
         <?php
         if ($auto->getEstado() === 'disponible'): ?>
             <p>El auto está disponible para reservar o comprar.</p>
-            <form method="POST" action="/controller/reserva/auto_controller.php">
+            <form method="POST" action="<?= BASE_URL_CTRL ?>reserva/auto_controller.php">
                 <input type="hidden" name="id_auto" value="<?= htmlspecialchars($auto->getId()) ?>">
                 <label>ID Usuario: <input type="number" name="id_usuario" required></label>
                 <button type="submit">Reservar</button>
