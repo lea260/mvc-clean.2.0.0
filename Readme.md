@@ -1,171 +1,207 @@
-Here's the updated `README.md` with the Git clone instructions added as the initial step, before the Docker setup.
+Aquí tienes el contenido completo del `README.md` actualizado con todos los puntos, incluyendo el nuevo punto **12: Configuraciones de Visual Studio Code**:
 
------
+---
 
 # Iniciando el Proyecto con Docker y Composer
 
 Para poner en marcha este proyecto, sigue estos pasos:
 
-### 1\. Clonar el Repositorio
+---
 
-Primero, descarga el código fuente del proyecto desde GitHub. Esto creará una carpeta llamada `mvc-clean.2.0.0` en tu directorio actual.
+### 1. Preparar Git y Clonar el Repositorio
+
+Primero, configura Git para evitar problemas de fin de línea que pueden afectar archivos ejecutables en entornos Linux:
+
+```bash
+git config --global core.autocrlf true
+```
+
+Luego, clona el repositorio. Esto creará una carpeta llamada `mvc-clean.2.0.0` en tu directorio actual:
 
 ```bash
 git clone git@github.com:lea260/mvc-clean.2.0.0.git
-```
-
-Una vez clonado, **ingresa a la carpeta del proyecto**:
-
-```bash
 cd mvc-clean.2.0.0
 ```
 
------
+Después de clonar, asegúrate de marcar el archivo `docker-entrypoint.sh` como ejecutable:
 
-### 2\. Iniciar los Contenedores Docker
+```bash
+git update-index --chmod=+x docker-entrypoint.sh
+```
 
-Ahora que estás en la carpeta del proyecto, levanta todos los servicios definidos en tu archivo `docker-compose.yml`. Esto iniciará tu entorno de desarrollo, incluyendo el contenedor PHP, en segundo plano.
+---
+
+### 2. Iniciar los Contenedores Docker
+
+Inicia los servicios definidos en `docker-compose.yml`:
 
 ```bash
 docker-compose up -d
 ```
 
------
+---
 
-### 3\. Acceder al Contenedor PHP
-
-Una vez que los contenedores estén en funcionamiento, necesitarás acceder al entorno PHP dentro de tu contenedor Docker. Esto te permitirá ejecutar comandos de Composer y otras operaciones relacionadas con PHP.
+### 3. Acceder al Contenedor PHP
 
 ```bash
 docker exec -it php_container bash
 ```
 
-Este comando ejecuta un shell interactivo (`-it`) dentro del contenedor llamado `php_container`.
+---
 
------
-
-### 4\. Volcar la Autocarga de Composer
-
-Una vez dentro del contenedor, el siguiente paso es "volcar" la autocarga de Composer. Esto es crucial después de instalar o actualizar dependencias, ya que regenera el mapa de clases para que Composer sepa dónde encontrar todos los archivos de tu proyecto.
+### 4. Volcar la Autocarga de Composer
 
 ```bash
 composer dump-autoload
 ```
 
-**Nota:** Es importante ejecutar `composer dump-autoload` siempre que añadas nuevas clases, cambies el *namespace* de alguna existente, o instales nuevas librerías para asegurar que tu proyecto funcione correctamente.
+---
 
------
+### 5. Acceder a la Aplicación y phpMyAdmin
 
-### 5\. Acceder a la Aplicación y phpMyAdmin
+* **Aplicación:** [http://localhost:8080](http://localhost:8080)
+* **phpMyAdmin:** [http://localhost:8081](http://localhost:8081)
 
-Una vez que los contenedores estén corriendo y Composer haya actualizado la autocarga, podrás acceder a la aplicación y a phpMyAdmin:
+---
 
-  * **La aplicación estará disponible en:**
-    [http://localhost:8080](https://www.google.com/search?q=http://localhost:8080)
+### 6. Configurar la Base de Datos
 
-  * **Para ingresar a phpMyAdmin, utiliza la siguiente URL:**
-    [http://localhost:8081](https://www.google.com/search?q=http://localhost:8081)
+1. Crear una base de datos (ej. `concesionaria`).
+2. Importar `schema.sql`.
+3. Importar `data.sql`.
 
------
+---
 
-### 6\. Configurar la Base de Datos
+### 7. Limpieza de Contenedores e Imágenes
 
-Dentro de phpMyAdmin, deberás crear y poblar la base de datos:
+```bash
+docker compose down --rmi all        # Sin volúmenes  
+docker compose down --rmi all -v     # Con volúmenes (¡borrará tus datos!)
+```
 
-1.  **Crea una nueva base de datos** (el nombre debería coincidir con el configurado en tu aplicación, comúnmente `concesionaria` si usaste el ejemplo anterior).
-2.  **Importa el esquema de la base de datos** ejecutando el archivo `schema.sql`. Esto creará todas las tablas necesarias.
-3.  **Importa los datos iniciales** ejecutando el archivo `data.sql`. Esto poblará las tablas con datos de ejemplo.
+---
 
-¡Tu aplicación ya debería estar lista para usar\!
+### 8. Solución de Problemas con el Depurador (Xdebug)
 
------
+1. Verifica que Xdebug esté cargado:
 
-### 7\. Limpieza de Contenedores e Imágenes
+   ```bash
+   php -i | grep xdebug
+   ```
 
-Cuando termines de trabajar en el proyecto o quieras liberar espacio, puedes usar estos comandos para detener y eliminar los recursos de Docker:
+2. (Opcional) Probar conexión desde el contenedor:
 
-  * **Para detener los contenedores y eliminar sus imágenes (pero no los volúmenes de datos):**
+   * Para Alpine:
 
-    ```bash
-    docker compose down --rmi all
-    ```
+     ```bash
+     apk add telnet-client
+     ```
 
-  * **Para detener los contenedores, eliminar sus imágenes y también los volúmenes de datos (¡uso con precaución, esto borrará tus datos\!):**
+   * Para Debian/Ubuntu:
 
-    ```bash
-    docker compose down --rmi all -v
-    ```
+     ```bash
+     apt update && apt install telnet -y
+     ```
 
------
+   Luego:
 
-### 8\. Solución de Problemas con el Depurador (Xdebug)
+   ```bash
+   telnet host.docker.internal 9011
+   ```
 
-Si estás teniendo problemas con el depurador (Xdebug) o quieres verificar su configuración, sigue estos pasos desde una terminal bash dentro de tu contenedor PHP:
+---
 
-1.  **Ingresa al contenedor PHP:**
+### 9. Configurar una Regla de Firewall para el Depurador (Windows 11)
 
-    ```bash
-    docker exec -it php_container bash
-    ```
+Sigue estos pasos para permitir conexiones al puerto `9011` desde el contenedor hacia tu IDE.
 
-2.  **Verifica la configuración de Xdebug:**
-    Una vez dentro del contenedor, ejecuta el siguiente comando para ver si Xdebug está cargado y sus configuraciones:
+1. Ejecuta `wf.msc`.
+2. Crea una nueva **Regla de entrada**.
+3. Usa el puerto TCP `9011`.
+4. Permite la conexión en todos los perfiles.
+5. Nómbrala `Xdebug PHP-FPM (Puerto 9011)`.
 
-    ```bash
-    php -i | grep xdebug
-    ```
+---
 
-    Busca líneas que confirmen que Xdebug está habilitado y configurado para conectarse a la IP correcta de tu host y puerto de depuración (generalmente `host.docker.internal` y el puerto por defecto de Xdebug es `9003` o `9000`).
+### 10. Debugger y Archivo `php.ini`
 
-3.  **Verifica la conexión del depurador (opcional, para entornos sin `telnet` preinstalado):**
-    Si quieres asegurarte de que tu host puede conectarse al puerto de depuración, puedes intentar usar `telnet`. Primero, instala `telnet` dentro del contenedor (el comando varía según la distribución de Linux que use tu imagen PHP):
+El contenedor PHP ya incluye la configuración necesaria para Xdebug. Aquí un resumen:
 
-      * **Para Alpine (u otras distros basadas en `apk`):**
+```ini
+[xdebug]
+zend_extension=xdebug.so
+xdebug.mode=debug
+xdebug.start_with_request=yes
+xdebug.client_host=host.docker.internal
+xdebug.client_port=9011
+xdebug.discover_client_host=false
+```
 
-        ```bash
-        apk add telnet-client
-        ```
+Esto permite que Xdebug se conecte a tu IDE en Windows 11 usando el host especial `host.docker.internal` y el puerto `9011`.
 
-      * **Para Debian/Ubuntu (u otras distros basadas en `apt`):**
+---
 
-        ```bash
-        apt update && apt install telnet -y
-        ```
+### 11. Configuración de Depuración en `.vscode/launch.json`
 
-    Una vez instalado `telnet`, puedes probar la conexión al depurador desde el contenedor (reemplaza `<PUERTO_DEL_DEPURADOR>` con el puerto configurado para Xdebug, comúnmente 9003 o 9000):
+El archivo `.vscode/launch.json` ya está incluido en el repositorio. Define la configuración de depuración para PHP con Xdebug:
 
-    ```bash
-    telnet host.docker.internal <PUERTO_DEL_DEPURADOR>
-    ```
+```json
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Listen for Xdebug",
+      "type": "php",
+      "request": "launch",
+      "port": 9011,
+      "pathMappings": {
+        "/var/www/html": "${workspaceFolder}/src"
+      },
+      "xdebugSettings": {
+        "max_children": 128,
+        "max_data": 512,
+        "max_depth": 5
+      }
+    }
+  ]
+}
+```
 
-    Si la conexión es exitosa, verás algo como "Connected to host.docker.internal". Si falla, podría haber un problema con el puerto, el firewall, o la configuración de Xdebug en el archivo `php.ini`.
+* **`port: 9011`** debe coincidir con lo definido en el `php.ini` del contenedor.
+* **`pathMappings`** indica que `/var/www/html` (dentro del contenedor) corresponde a la carpeta `src` en tu entorno local (`${workspaceFolder}/src`).
 
------
+> Esto es esencial ya que en `docker-compose.yml` se mapea así:
+>
+> ```yaml
+> - ./src:/var/www/html
+> ```
 
-### 9\. Configurar una Regla de Firewall para el Depurador (Windows 11)
+---
 
-Si estás utilizando Windows 11 y tu depurador (Xdebug) no logra conectarse desde el contenedor a tu IDE, es posible que el Firewall de Windows esté bloqueando la conexión entrante al puerto del depurador.
+### 12. Configuraciones Adicionales de Visual Studio Code
 
-Sigue estos pasos para crear una regla de entrada en el Firewall de Windows para permitir las conexiones al puerto `9011` (o el puerto que hayas configurado para Xdebug en tu IDE y `php.ini`):
+Puedes importar configuraciones personales de desarrollo desde el siguiente Gist:
 
-1.  **Abrir el Firewall de Windows con Seguridad avanzada:**
+🔗 [https://gist.github.com/lea260](https://gist.github.com/lea260)
 
-      * Presiona `Win + R` para abrir el cuadro de diálogo Ejecutar.
-      * Escribe `wf.msc` y presiona Enter. Esto abrirá la consola de "Firewall de Windows con seguridad avanzada".
+Este archivo contiene preferencias personales, como formato, tema, estilo de pestañas y otras opciones útiles para proyectos PHP con Docker. Puedes adaptarlo o extenderlo según tus necesidades en `.vscode/settings.json`.
 
-2.  **Crear una Nueva Regla de Entrada:**
+#### Extensiones recomendadas:
 
-      * En el panel de la izquierda, haz clic en **Reglas de entrada**.
-      * En el panel de la derecha, haz clic en **Nueva regla...**.
+| Extensión             | ID                                    | Función principal                       |
+| --------------------- | ------------------------------------- | --------------------------------------- |
+| **PHP Debug**         | `felixfbecker.php-debug`              | Depuración con Xdebug                   |
+| **PHP Intelephense**  | `bmewburn.vscode-intelephense-client` | Autocompletado y análisis estático      |
+| **Docker** (opcional) | `ms-azuretools.vscode-docker`         | Gestión de contenedores desde el editor |
 
-3.  **Configurar la Regla:**
+Instalación rápida desde la terminal:
 
-      * **Tipo de regla:** Selecciona `Puerto` y haz clic en `Siguiente`.
-      * **Protocolo y puertos:**
-          * Deja seleccionado `TCP`.
-          * En `Puertos locales específicos`, escribe `9011` (o tu puerto de depuración configurado). Haz clic en `Siguiente`.
-      * **Acción:** Selecciona `Permitir la conexión` y haz clic en `Siguiente`.
-      * **Perfil:** Marca todos los perfiles (`Dominio`, `Privado`, `Público`) para asegurar que la regla funcione en cualquier red. Haz clic en `Siguiente`.
-      * **Nombre:** Asigna un nombre descriptivo a la regla, por ejemplo, `Xdebug PHP-FPM (Puerto 9011)`. Puedes añadir una descripción si lo deseas. Haz clic en `Finalizar`.
+```bash
+code --install-extension felixfbecker.php-debug
+code --install-extension bmewburn.vscode-intelephense-client
+code --install-extension ms-azuretools.vscode-docker
+```
 
-Después de crear la regla, Xdebug debería poder conectarse a tu IDE sin problemas.
+---
+
+¿Te gustaría que te lo entregue también como archivo `.md` descargable o que lo suba a algún repositorio?
