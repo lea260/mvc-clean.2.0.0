@@ -251,3 +251,64 @@ docker exec -it php_container bash
 ---
 
 ¿Deseas agregar también un punto sobre testing, rutas o controladores para cerrar el flujo de desarrollo?
+
+Perfecto. Aquí tienes el **punto 15** para añadir al final del `README.md`, explicando el manejo de finales de línea (`LF` vs `CRLF`) y cómo forzar una política uniforme usando `.gitattributes`:
+
+---
+
+### 15. 🧼 Normalización de Saltos de Línea (LF vs CRLF)
+
+Los archivos `.sh` (como `docker-entrypoint.sh`) deben tener **saltos de línea tipo LF**, ya que son ejecutados en un entorno Linux. Usar saltos de línea tipo **CRLF** (propios de Windows) puede provocar errores como:
+
+```
+exec /usr/local/bin/docker-entrypoint.sh: no such file or directory
+```
+
+#### ✅ Recomendaciones para evitar errores:
+
+1. **Configura Git para que respete los saltos de línea tipo Unix:**
+
+   En lugar de permitir la conversión automática a CRLF (que puede romper scripts), usa esta configuración:
+
+   ```bash
+   git config --global core.autocrlf input
+   ```
+
+   > Esto hace que Git mantenga `LF` al hacer checkout y convierta `CRLF → LF` al hacer commit.
+
+2. **Agrega un archivo `.gitattributes` para forzar `LF` en todos los `.sh`:**
+
+   Crea un archivo `.gitattributes` en la raíz del proyecto (si aún no existe) y agrega:
+
+   ```
+   *.sh text eol=lf
+   ```
+
+   Esto asegura que todos los scripts shell mantengan finales de línea tipo `LF`, sin importar el sistema operativo del desarrollador.
+
+3. **Renormaliza el repositorio después de aplicar `.gitattributes`:**
+
+   ```bash
+   git add --renormalize .
+   git commit -m "Normalize line endings to LF using .gitattributes"
+   ```
+
+4. **Convierte archivos manualmente (opcional):**
+
+   Si ya clonaste el repo en Windows y ves problemas, puedes usar `dos2unix`:
+
+   ```bash
+   dos2unix docker-entrypoint.sh
+   ```
+
+#### 💡 Tip
+
+En editores como VS Code puedes ver el tipo de salto de línea en la esquina inferior derecha. Haz clic allí para cambiar entre `CRLF` y `LF`.
+
+---
+
+Con esto garantizas que los scripts se ejecuten correctamente en cualquier entorno Linux o Docker sin errores por formato de archivo.
+
+---
+
+¿Quieres que te genere un ejemplo más completo de `.gitattributes` para otros tipos de archivos también?
