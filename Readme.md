@@ -1,4 +1,4 @@
-Aquí tienes el contenido completo del `README.md` actualizado con todos los puntos, incluyendo el nuevo punto **12: Configuraciones de Visual Studio Code**:
+Claro, aquí tienes el contenido completo del `README.md` actualizado con todos los puntos del 1 al 14:
 
 ---
 
@@ -135,6 +135,10 @@ xdebug.start_with_request=yes
 xdebug.client_host=host.docker.internal
 xdebug.client_port=9011
 xdebug.discover_client_host=false
+extension=pdo_mysql
+display_errors = On
+display_startup_errors = On
+error_reporting = E_ALL
 ```
 
 Esto permite que Xdebug se conecte a tu IDE en Windows 11 usando el host especial `host.docker.internal` y el puerto `9011`.
@@ -204,4 +208,46 @@ code --install-extension ms-azuretools.vscode-docker
 
 ---
 
-¿Te gustaría que te lo entregue también como archivo `.md` descargable o que lo suba a algún repositorio?
+### 13. Archivos `.vscode` del Proyecto
+
+La carpeta `.vscode` incluida en el repositorio contiene:
+
+* `launch.json`: configuración del depurador con puerto `9011` y mapeo `/var/www/html` a `src`.
+* (Opcional) Puedes añadir o modificar `settings.json` para adaptar VS Code a tus preferencias.
+* Puedes agregar tus propias configuraciones según el estilo de trabajo que prefieras.
+
+---
+
+### 14. Solucionar error al iniciar `php_container`
+
+Si al ingresar a [http://localhost:8080](http://localhost:8080) no se obtiene conexión, verifica los logs:
+
+```bash
+docker logs php_container
+```
+
+Si aparece el error:
+
+```
+exec /usr/local/bin/docker-entrypoint.sh: no such file or directory
+```
+
+Esto indica que el archivo tiene terminadores de línea incorrectos (CRLF en lugar de LF). Solución:
+
+1. Cambia los saltos de línea de `CRLF` a `LF` en `docker-entrypoint.sh`.
+2. Reconstruye el contenedor:
+
+```bash
+docker compose build --no-cache php
+docker compose up -d
+```
+
+3. Luego verifica el contenedor PHP:
+
+```bash
+docker exec -it php_container bash
+```
+
+---
+
+¿Deseas agregar también un punto sobre testing, rutas o controladores para cerrar el flujo de desarrollo?
